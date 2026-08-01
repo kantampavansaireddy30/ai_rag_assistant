@@ -45,8 +45,7 @@ if user_question := st.chat_input("Ask a question..."):
             
         # Generate Prompt
         prompt = f"""
-        You are a helpful assistant. Answer the user's question using ONLY the provided context. 
-        If the answer is not in the context, say "I don't know based on my data."
+        You are a helpful assistant. "Answer the user's question. Prioritize using the information in the provided Context. If the Context does not contain the answer, you may use your general knowledge to answer."
 
         Context: {retrieved_text}
         Question: {user_question}
