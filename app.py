@@ -60,7 +60,7 @@ if user_question := st.chat_input("Ask a question..."):
             try:
                 # 1. TRY to call the API
                 response = llm_client.models.generate_content(
-                    model="gemini-3.6-flash",
+                    model="gemini-2.0-flash",
                     contents=prompt
                 )
                 
@@ -72,6 +72,6 @@ if user_question := st.chat_input("Ask a question..."):
             except Exception as e:
                 # 3. If it FAILS, catch the error and show a polite UI message
                 if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
-                    st.warning("⏳ The AI is thinking a bit too fast! We hit our free tier speed limit. Please wait about 60 seconds and try your question again.")
+                    st.warning("⏳ We hit our API quota limit! If you've asked a lot of questions today, you may need to wait until tomorrow for the daily reset.")
                 else:
                     st.error(f"An API error occurred: {e}")
