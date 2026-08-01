@@ -57,11 +57,22 @@ if user_question := st.chat_input("Ask a question..."):
         """
         
         with st.spinner("Thinking..."):
-            response = llm_client.models.generate_content(
-                model="gemini-3.6-flash", 
-                contents=prompt
-            )
-            
-            # Display the AI's answer and save it to history
-            st.write(response.text)
+            try:
+                # 1. TRY to call the API
+                response = llm_client.models.generate_content(
+                    model="gemini-3.6-flash",
+                    contents=prompt
+                )
+                
+                # 2. If it works, write the answer to the screen
+                st.write(response.text)
+                
+                # (Make sure you also append the response to your session_state history here!)
+                
+            except Exception as e:
+                # 3. If it FAILS, catch the error and show a polite UI message
+                if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+                    st.warning("⏳ The AI is thinking a bit too fast! We hit our free tier speed limit. Please wait about 60 seconds and try your question again.")
+                else:
+                    st.error(f"An API error occurred: {e}")
             st.session_state.messages.append({"role": "assistant", "content": response.text})
