@@ -45,9 +45,14 @@ if user_question := st.chat_input("Ask a question..."):
             
         # Generate Prompt
         prompt = f"""
-        You are a helpful assistant. "Answer the user's question. Prioritize using the information in the provided Context. If the Context does not contain the answer, you may use your general knowledge to answer."
-
+        You are a helpful and intelligent AI assistant. 
+        
+        First, evaluate if the user's question can be answered using the following Context retrieved from our local database:
         Context: {retrieved_text}
+        
+        If the Context contains relevant information, use it to answer the question accurately. 
+        If the Context is completely unrelated or missing the answer, ignore it and answer the user's question using your own general knowledge. Do not mention that the context was missing; just answer the question naturally.
+
         Question: {user_question}
         """
         
