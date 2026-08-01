@@ -66,7 +66,7 @@ if user_question := st.chat_input("Ask a question..."):
                 
                 # 2. If it works, write the answer to the screen
                 st.write(response.text)
-                
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
                 # (Make sure you also append the response to your session_state history here!)
                 
             except Exception as e:
@@ -75,4 +75,3 @@ if user_question := st.chat_input("Ask a question..."):
                     st.warning("⏳ The AI is thinking a bit too fast! We hit our free tier speed limit. Please wait about 60 seconds and try your question again.")
                 else:
                     st.error(f"An API error occurred: {e}")
-            st.session_state.messages.append({"role": "assistant", "content": response.text})
