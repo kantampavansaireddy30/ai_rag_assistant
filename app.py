@@ -123,16 +123,21 @@ if user_question := st.chat_input("Ask a question..."):
                 context_string = "\n".join(retrieved_facts)
                 
                 # 3. Create a secret super-prompt for Gemini
+                # 3. Create a flexible super-prompt for Gemini
                 augmented_prompt = f"""
-                You are a helpful assistant answering questions about my friends.
-                Use ONLY the following facts to answer the user's question. 
-                If the answer is not in the facts, say "I don't have that information in my database."
+                You are a helpful AI assistant. 
+                Below is some context retrieved from my personal database. 
                 
-                Database Facts:
+                Database Context:
                 {context_string}
                 
-                User Question:
+                User Message:
                 {prompt}
+                
+                Instructions:
+                - If the Database Context is relevant to the User Message, use it to answer!
+                - If the User Message is just a keyword (like a name), share what you know about them from the Database Context.
+                - If the Database Context has nothing to do with the User Message, just ignore the database and answer the user normally using your own general knowledge!
                 """
                 
                 # 4. Send the secret augmented prompt using gemini_client!
