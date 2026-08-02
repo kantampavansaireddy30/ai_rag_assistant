@@ -17,6 +17,23 @@ def get_chroma_client():
 chroma_client = get_chroma_client()
 collection = chroma_client.get_or_create_collection(name="rag_collection")
 
+# --- NEW: Auto-load data if the database is empty on the cloud ---
+if collection.count() == 0:
+    collection.add(
+        documents=[
+            "My friend Alex is a software engineer who loves playing cricket and eating biryani.",
+            "Sarah is a graphic designer and she usually hangs out at the local coffee shop.",
+            "Jordan's birthday is on October 12th and their favorite movie is The Matrix."
+        ],
+        metadatas=[
+            {"category": "friend", "name": "Alex"},
+            {"category": "friend", "name": "Sarah"},
+            {"category": "friend", "name": "Jordan"}
+        ],
+        ids=["friend_001", "friend_002", "friend_003"]
+    )
+# -----------------------------------------------------------------
+
 # 3. Initialize Google Gemini Client
 gemini_client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
