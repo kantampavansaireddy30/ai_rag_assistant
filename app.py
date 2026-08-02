@@ -1,7 +1,22 @@
 import os
 import streamlit as st
+import sys
+
+# 1. SQLite Patch for Streamlit Cloud
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 import chromadb
 from google import genai
+
+# 2. Initialize ChromaDB Client
+chroma_client = chromadb.PersistentClient(path="./chroma_db")
+collection = chroma_client.get_or_create_collection(name="rag_collection")
+
+# 3. Initialize Google Gemini Client
+gemini_client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+
+st.write("Welcome to my RAG Assistant. Ask me anything about my data!")
 
 
 
@@ -99,11 +114,12 @@ if user_question := st.chat_input("Ask a question..."):
                 {prompt}
                 """
                 
-                # 4. Send the secret augmented prompt to the AI!
-                response = client.models.generate_content(
+                # 4. Send the secret augmented prompt using gemini_client!
+                response = gemini_client.models.generate_content(
                     model="gemini-3.6-flash",
                     contents=augmented_prompt
                 )
+            
                 
                 # --- THE RAG MAGIC ENDS HERE ---
                 
