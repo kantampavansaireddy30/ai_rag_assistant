@@ -1,0 +1,12 @@
+[theme]
+# Accent color for interactive elements like buttons and sliders
+primaryColor = "#F39C12"
+
+# Background color for the main body of your app
+backgroundColor = "#0E1117"
+
+# Used as the background for the sidebar and for several widgets
+secondaryBackgroundColor = "#262730"
+
+# The text color for your app
+textColor = "#FAFAFA"
