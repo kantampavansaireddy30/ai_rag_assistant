@@ -74,16 +74,41 @@ if user_question := st.chat_input("Ask a question..."):
         
         with st.spinner("Thinking..."):
             try:
-                # 1. TRY to call the API
-                response = llm_client.models.generate_content(
-                    model="gemini-3.6-flash",
-                    contents=prompt
+                # --- THE RAG MAGIC STARTS HERE ---
+                
+                # 1. Search the database using the user's question
+                db_results = collection.query(
+                    query_texts=[prompt],
+                    n_results=1 # Pull the top 1 most relevant fact
                 )
                 
-                # 2. If it works, write the answer to the screen
+                # 2. Extract the text facts from the database results
+                retrieved_facts = db_results["documents"][0]
+                context_string = "\n".join(retrieved_facts)
+                
+                # 3. Create a secret super-prompt for Gemini
+                augmented_prompt = f"""
+                You are a helpful assistant answering questions about my friends.
+                Use ONLY the following facts to answer the user's question. 
+                If the answer is not in the facts, say "I don't have that information in my database."
+                
+                Database Facts:
+                {context_string}
+                
+                User Question:
+                {prompt}
+                """
+                
+                # 4. Send the secret augmented prompt to the AI!
+                response = client.models.generate_content(
+                    model="gemini-3.6-flash",
+                    contents=augmented_prompt
+                )
+                
+                # --- THE RAG MAGIC ENDS HERE ---
+                
                 st.write(response.text)
                 st.session_state.messages.append({"role": "assistant", "content": response.text})
-                # (Make sure you also append the response to your session_state history here!)
                 
             except Exception as e:
                 # 3. If it FAILS, catch the error and show a polite UI message
