@@ -9,8 +9,12 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chromadb
 from google import genai
 
-# 2. Initialize ChromaDB Client
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+# 2. Initialize ChromaDB Client (Cached!)
+@st.cache_resource
+def get_chroma_client():
+    return chromadb.PersistentClient(path="./chroma_db")
+
+chroma_client = get_chroma_client()
 collection = chroma_client.get_or_create_collection(name="rag_collection")
 
 # 3. Initialize Google Gemini Client
