@@ -3,9 +3,25 @@ import streamlit as st
 import chromadb
 from google import genai
 
+
+
+#0 sidebar
+with st.sidebar:
+    st.title("⚙️ App Controls")
+    st.write("Welcome to my custom AI application.")
+    st.divider() # Draws a neat visual line
+    
+    # A functional button to wipe the memory clean
+    if st.button("Clear Chat History"):
+        st.session_state.messages = []
+        st.rerun() # Refreshes the UI instantly
+
 # 1. UI Configuration
-st.set_page_config(page_title="My RAG Assistant", page_icon="🤖")
-st.title("My First RAG App 🚀")
+st.set_page_config(
+    page_title="Pavan's RAG Assistant",
+    page_icon="🚀",
+    layout="centered" # Change to "wide" if you want the app to span the whole screen
+)
 
 # 2. Database Connection
 # @st.cache_resource prevents Streamlit from reconnecting to the DB every time you chat
