@@ -60,7 +60,7 @@ if user_question := st.chat_input("Ask a question..."):
             try:
                 # 1. TRY to call the API
                 response = llm_client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-1.5-flash",
                     contents=prompt
                 )
                 
