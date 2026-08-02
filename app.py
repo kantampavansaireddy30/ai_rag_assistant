@@ -35,7 +35,7 @@ llm_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 # 3. Initialize Chat History in Session State
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "assistant", "content": "Ask me a question about cricket, biryani, or C++!"}]
+    st.session_state.messages = [{"role": "assistant", "content": "Ask me about my friends with their names"}]
 
 # 4. Render previous messages on the screen
 for msg in st.session_state.messages:
